@@ -1,6 +1,9 @@
 Notes on Trex playing AI
 
-Problem Statement(Ideal scenario)
+Problem Statement : 
+	Play the Google Chrome T-Rex game much better than average human
+
+Ideal Solution : 
 	We tell the AI what is "You Lost" screen. 
 	We tell the AI that the game is scored based on "Time Played".
 	We tell the AI what are the controls. We DO NOT tell what the controls do. 
@@ -8,13 +11,21 @@ Problem Statement(Ideal scenario)
 	The robot figures out what makes it win, and what makes it lose, by playing the game.
 	It improves itself by self play, and beats humans.
 
-Subproblem 1
+Subproblem 1A
 	We tell the AI the controls, and we want the AI to figure out what the controls do. 
-
-	Approach
-	We take continuous screenshots of the game, while randomly playing with controls.
-	We develop and algorithm that learns the changes caused to the game because of the user actions. 
+	Approach : We take continuous screenshots of the game, while randomly playing with controls. We develop and algorithm that learns the changes caused to the game because of the controls.
 
 	Idea 1
-	Use some feature-detection and feature-matching(for eg. SIFT) to detect changes between adjacent frames. 
-	Then, cluster based on 
+		The basic idea is to develop a generic algo that will solve Subproblem 1A for a generic game with generic controls.
+	Algo 1
+		STEP 1 : Use some feature-detection and feature-matching(for eg. SIFT) to detect changes between adjacent frames. 
+		STEP 2 : Then, cluster based on x1,y1,x2,y2, where x1,y1 is the feature point in frame 1, and x2,y2 is the matching feature point on frame 2, for each pair of adjacent frames. This clustering should produce clusters that are, a) close together b) had similar motion when key was pressed
+		STEP 3 : Get cluster centroids for each frame. 
+		STEP 4 : Detect correlations between cluster centroids and actions. The hypothesis is that the character cluster will have a much higher correlation than the other noisy clusters. Thus, we can figure out which is the character cluster. 
+
+Subproblem 1B
+	We actually tried to implement Idea 1 of Subproblem 1A in find_player.py
+	But it was getting to complicated to fast. 
+	Thus, we arrived at Subproblem 1B by simplyfying Subproblem 1A. We hope that the simpler problem can be solved easily, and we can go back to original subproblem later.
+	Approach : We are provided with information about the character in advance. Thus, we dont have to figure out who is the player. Instead, we just have to figure out how the controls affect the character. 
+
