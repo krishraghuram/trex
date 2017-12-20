@@ -1,0 +1,20 @@
+Notes on Trex playing AI
+
+Problem Statement(Ideal scenario)
+	We tell the AI what is "You Lost" screen. 
+	We tell the AI that the game is scored based on "Time Played".
+	We tell the AI what are the controls. We DO NOT tell what the controls do. 
+	The robot figures out what the controls do. 
+	The robot figures out what makes it win, and what makes it lose, by playing the game.
+	It improves itself by self play, and beats humans.
+
+Subproblem 1
+	We tell the AI the controls, and we want the AI to figure out what the controls do. 
+
+	Approach
+	We take continuous screenshots of the game, while randomly playing with controls.
+	We develop and algorithm that learns the changes caused to the game because of the user actions. 
+
+	Idea 1
+	Use some feature-detection and feature-matching(for eg. SIFT) to detect changes between adjacent frames. 
+	Then, cluster based on 
