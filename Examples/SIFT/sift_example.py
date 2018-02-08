@@ -22,20 +22,23 @@ im_kp2 = cv2.drawKeypoints(im2,kp2,None)
 #BF Matching
 #################################################################################
 ### Without Ratio Test
-# bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=True)
+bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=True)
 # matches = bf.match(des1,des2)
+matches = bf.knnMatch(des1,des2, k=1)
+matches = [i for i in matches if len(i)==1]
+matches = [i[0] for i in matches]
+
 ### With Ratio Test
-bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=False)
-matches = bf.knnMatch(des1,des2, k=2)
-good_matches = []
-for m,n in matches:
-    if m.distance < 0.75*n.distance:
-        good_matches.append(m)
+# bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=False)
+# matches = bf.knnMatch(des1,des2, k=2)
+# good_matches = []
+# for m,n in matches:
+#     if m.distance < 0.75*n.distance:
+#         good_matches.append(m)
+# matches = good_matches
+# matches = sorted(matches, key = lambda x:x.distance)
+# matches = matches[0:100]
 
-
-matches = good_matches
-matches = sorted(matches, key = lambda x:x.distance)
-matches = matches[0:100]
 im_matches = cv2.drawMatches(im_kp1, kp1, im_kp2, kp2, matches, None, flags=2)
 
 #################################################################################

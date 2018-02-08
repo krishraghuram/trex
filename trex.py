@@ -57,19 +57,25 @@ def play_and_record():
 		kp, des = sift.detectAndCompute(im, None)
 		data[i]['kp'] = kp
 		data[i]['des'] = des
-		if i > 1 :	
+		if i > 0 :	
 			kp_prev = data[i-1].get('kp')
 			des_prev = data[i-1].get('des')
 
 			### Brute Force Matching with Ratio Test
 			if des is not None:
-				bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=False)
-				matches = bf.knnMatch(des_prev,des, k=2)
-				good_matches = []
-				for m,n in matches:
-					if m.distance < constants.match_reject_thresh * n.distance:
-						good_matches.append(m)
-				matches = good_matches
+				# bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=False)
+				# matches = bf.knnMatch(des_prev,des, k=2)
+				# good_matches = []
+				# for m,n in matches:
+				# 	if m.distance < constants.match_reject_thresh * n.distance:
+				# 		good_matches.append(m)
+				# matches = good_matches
+				
+				bf = cv2.BFMatcher(cv2.NORM_L2, crossCheck=True)
+				matches = bf.knnMatch(des_prev,des, k=1)
+				matches = [j for j in matches if len(j)==1]
+				matches = [j[0] for j in matches]
+				
 				data[i]['matches'] = matches
 
 	return data
@@ -107,18 +113,6 @@ if __name__=='__main__':
 	# 			pass
 	# 		else: 
 	# 			print k
-
-	### TEST CODE - Time Variance Analysis
-	temp = []
-	for i in range(len(data)-1):
-		t1 = data[i].get('time')
-		t2 = data[i+1].get('time')
-		temp.append(t2-t1)
-	print "Loop Sleep Time : ", constants.loop_sleep_time
-	print "TEMP"
-	print temp
-	print "Mean : ", np.mean(np.array(temp))
-	print "Var : ", np.var(np.array(temp)/constants.loop_sleep_time)
 
 	### Perform clustering on (x1,y1,x2,y2) over all image pairs.
 	for i in range(1,len(data)):
