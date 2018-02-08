@@ -7,9 +7,9 @@ Ideal Solution :
 	We tell the AI what is "You Lost" screen. 
 	We tell the AI that the game is scored based on "Time Played".
 	We tell the AI what are the controls. We DO NOT tell what the controls do. 
-	The robot figures out what the controls do. 
-	The robot figures out what makes it win, and what makes it lose, by playing the game.
-	It improves itself by self play, and beats humans.
+	The AI figures out what the controls do.
+	The AI figures out what makes it win, and what makes it lose, by playing the game.
+	It improves itself by self play.
 
 Subproblem 1A
 	We tell the AI the controls, and we want the AI to figure out what the controls do. 
@@ -20,8 +20,14 @@ Subproblem 1A
 	Algo 1
 		STEP 1 : Use some feature-detection and feature-matching(for eg. SIFT) to detect changes between adjacent frames. 
 		STEP 2 : Then, cluster based on x1,y1,x2,y2, where x1,y1 is the feature point in frame 1, and x2,y2 is the matching feature point on frame 2, for each pair of adjacent frames. This clustering should produce clusters that are, a) close together b) had similar motion when key was pressed
-		STEP 3 : Get cluster centroids for each frame. 
-		STEP 4 : Detect correlations between cluster centroids and actions. The hypothesis is that the character cluster will have a much higher correlation than the other noisy clusters. Thus, we can figure out which is the character cluster. 
+		The no. of clusters is taken a hyper-parameter.
+		STEP 4 : Detect correlations between cluster centers and actions. The hypothesis is that the character cluster will have a much higher correlation than the other noisy clusters. Thus, we can figure out which is the character cluster.
+		To detect correlation, we have "Track" cluster centers across frames.
+		This is done using the following algorithm.
+			1) Frame 1 has n cluster centers and Frame 2 also has n cluster centers.
+			2) Out of n^2 pairs of distances, find the n smallest distances.
+			3) If any cluster center is repeated, drop Frame 2.
+			4) Else, label the centers in Frame 2 based on their pairs in Frame 1.
 
 Subproblem 1B
 	We actually tried to implement Idea 1 of Subproblem 1A in find_player.py

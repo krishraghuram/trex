@@ -1,0 +1,5 @@
+Looking at Results for loop_sleep_time = 0.05, 0.1, 0.25
+
+We can see that normalized variance is minimum for 0.1 
+
+Thus, we can fix loop_sleep_time = 0.1
